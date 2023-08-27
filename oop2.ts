@@ -45,7 +45,7 @@ class Appointment {
     date: Date;
     time: string;
 
-    constructor(patient: Patient, doctor: Doctor, date: string, time: string) {
+    constructor(patient: Patient, doctor: Doctor, date: Date, time: string) {
         this.patient = patient;
         this.doctor = doctor;
         this.date = new Date(date);
@@ -53,12 +53,11 @@ class Appointment {
     }
 
     getAppointmentInfo() {
-        console.log(`${this.patient.getPatientInfo()}, ${this.doctor.getDoctorInfo()}, date: ${this.date.getDate()}, time: ${this.time}`);
-
+        console.log(`${this.patient.getPatientInfo()}, ${this.doctor.getDoctorInfo()}, date: ${this.date.toLocaleDateString()}, time: ${this.time}`);
     }
 }
 
-const newAppointment = new Appointment(new Patient(10, "meir", "ber"), new Doctor(1, "family medicine", "moris", "morst"), "27/08/23", "14:22")
+const newAppointment = new Appointment(new Patient(10, "meir", "ber"), new Doctor(1, "family medicine", "moris", "morst"), new Date("2023/08/27"), "14:22")
 newAppointment.getAppointmentInfo()
 
 class Hospital {
@@ -100,8 +99,9 @@ class Hospital {
         console.log(filterAppointments);
     }
 
-    ShowingTodaysQueues(id: number): void {
-        let filterAppointments: Appointment[] = this.appointments.filter((appointment: Appointment):boolean => appointment.patient.patientID === id) 
+    ShowingTodaysQueues(): void {
+        let today = new Date().toLocaleDateString()
+        let filterAppointments: Appointment[] = this.appointments.filter((appointment: Appointment):boolean => appointment.date.toLocaleDateString() === today) 
         console.log(filterAppointments);
     }
 }
