@@ -38,6 +38,16 @@ var Rectangle = /** @class */ (function (_super) {
     Rectangle.prototype.info = function () {
         return "This is a Recktangle";
     };
+    Rectangle.prototype.scale = function (factor) {
+        this.width *= factor;
+        this.height *= factor;
+        return this;
+    };
+    Rectangle.combineAreas = function (rectangle1, rectangle2) {
+        var totalWidth = rectangle1.width + rectangle2.width;
+        var totalHeight = rectangle1.height + rectangle2.height;
+        return new Rectangle(totalWidth, totalHeight);
+    };
     return Rectangle;
 }(Shape));
 var rectangle1 = new Rectangle(2, 5);

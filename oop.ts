@@ -23,6 +23,16 @@ class Rectangle extends Shape {
     info(): string {
         return "This is a Recktangle"
     }
+    scale(factor: number):Rectangle{
+        this.width*= factor;
+        this.height*= factor;
+        return this
+    }
+    static combineAreas(rectangle1: Rectangle, rectangle2: Rectangle): Rectangle {
+        const totalWidth = rectangle1.width + rectangle2.width;
+        const totalHeight = rectangle1.height + rectangle2.height;
+        return new Rectangle(totalWidth, totalHeight);
+    }
 }
 
 let rectangle1 = new Rectangle(2, 5);
