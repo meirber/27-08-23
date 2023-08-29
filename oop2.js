@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+// קלאס פרסון
 var Person = /** @class */ (function () {
     function Person(firstName, lastName, age, address) {
         this.firstName = firstName;
@@ -25,6 +26,7 @@ var Person = /** @class */ (function () {
     };
     return Person;
 }());
+// קלאס פציינט
 var Patient = /** @class */ (function (_super) {
     __extends(Patient, _super);
     function Patient(patientID, firstName, lastName, age, address, phoneNumbe, emergencyContact, medicalHistory) {
@@ -44,9 +46,7 @@ var Patient = /** @class */ (function (_super) {
     };
     return Patient;
 }(Person));
-// const newPatuent = new Patient(10, "meir", "ber");
-// console.log(newPatuent);
-// newPatuent.getInfo();
+//  קלאס צוות רפואי
 var MedicalStaff = /** @class */ (function (_super) {
     __extends(MedicalStaff, _super);
     function MedicalStaff(firstName, lastName, age, address, staffID, position, department) {
@@ -58,6 +58,7 @@ var MedicalStaff = /** @class */ (function (_super) {
     }
     return MedicalStaff;
 }(Person));
+// קלאס דוקטור
 var Doctor = /** @class */ (function (_super) {
     __extends(Doctor, _super);
     function Doctor(doctorID, specialization, firstName, lastName, age, address, staffID, position, department, availability) {
@@ -73,17 +74,15 @@ var Doctor = /** @class */ (function (_super) {
     Doctor.prototype.isAvailable = function (date) {
         for (var _i = 0, _a = this.availability; _i < _a.length; _i++) {
             var slot = _a[_i];
-            if (date.toLocaleDateString === slot.toLocaleDateString) {
-                return false;
+            if (date.toLocaleDateString() === slot.toLocaleDateString()) {
+                return true;
             }
         }
-        return true;
+        return false;
     };
     return Doctor;
 }(MedicalStaff));
-// const newDoctor = new Doctor(10, "tooth", "meir", "ber");
-// console.log(newDoctor);
-// newDoctor.getInfo();
+// קלאס תורים
 var Appointment = /** @class */ (function () {
     function Appointment(patient, doctor, date, time, status) {
         this.patient = patient;
@@ -103,8 +102,7 @@ var Appointment = /** @class */ (function () {
     };
     return Appointment;
 }());
-// const newAppointment = new Appointment(new Patient(10, "meir", "ber"), new Doctor(1, "family medicine", "moris", "morst"), new Date("2023/08/27"), "14:22")
-// newAppointment.getInfo()
+// קלאס בית חולים
 var Hospital = /** @class */ (function () {
     function Hospital(patients, doctors, appointments, hospital, medicalRecord) {
         this.patients = patients;
@@ -120,7 +118,15 @@ var Hospital = /** @class */ (function () {
         this.doctors.push(doctor);
     };
     Hospital.prototype.addAppointment = function (appointment) {
-        this.appointments.push(appointment);
+        if (appointment.doctor.isAvailable(appointment.date)) {
+            this.appointments.push(appointment);
+            for (var i = 0; i < appointment.doctor.availability.length; i++) {
+                if (appointment.date.toLocaleDateString() === appointment.doctor.availability[i].toLocaleDateString())
+                    appointment.doctor.availability.splice(i, 1);
+            }
+        }
+        else
+            console.log("It is not possible to make an appointment for the requested date");
     };
     Hospital.prototype.ShowingAllQueues = function () {
         this.appointments.forEach(function (appointment) { return appointment.getInfo(); });
@@ -146,25 +152,38 @@ var Hospital = /** @class */ (function () {
     };
     return Hospital;
 }());
+// יצירת בית חולים
 var hospital1 = new Hospital([], [], [], "Medical Center", []);
+// יצירת פציינט 1
 var patient1 = new Patient(1, "meir", "levi", 24, "dover 6", "0533123243", "0505050555", []);
+// הוספת פציינט 1 לבית חולים
 hospital1.addPatient(patient1);
-var patient2 = new Patient(2, "shalom", "mor", 27, "dover 9", "0556747657", "0505000000", []);
+// יצירת פציינט 2
+var patient2 = new Patient(2, "shalom", "mor", 27, "color 9", "0556747657", "0505000000", []);
+// הוספת פציינט 2 לבית חולים
 hospital1.addPatient(patient2);
+// יצירת דוקטור
 var doctor1 = new Doctor(1, "Cardiology", "noam", "gavish", 50, "molo 56", 8789, 3, 12, [new Date("2023/08/27"), new Date("2023/12/30")]);
+// הוספת הדוקטור לבית חולים
 hospital1.addDoctor(doctor1);
+// יצירת דוקטור 2
 var doctor2 = new Doctor(2, "Pediatrician", "ami", "chohen", 65, "fgh 45", 2324, 1, 10, [new Date("2023/09/27"), new Date("2023/11/20")]);
+// הוספת הדוקטור לבית חולים
 hospital1.addDoctor(doctor2);
+// יצירת תור
 var appointment1 = new Appointment(patient1, doctor1, new Date("2023/11/04"), "10:30", "Planned");
 hospital1.addAppointment(appointment1);
+// יצירת תור
 var appointment2 = new Appointment(patient1, doctor2, new Date("2023/11/05"), "13:30", "Planned");
 hospital1.addAppointment(appointment2);
-var appointment3 = new Appointment(patient2, doctor2, new Date("2023/08/28"), "12:00", "Planned");
+// יצירת תור
+var appointment3 = new Appointment(patient2, doctor2, new Date("2023/09/27"), "12:00", "Planned");
 hospital1.addAppointment(appointment3);
 hospital1.ShowingAllQueues();
 hospital1.DisplayingDoctorsAppointmentsByID(2);
 hospital1.DisplayingpatientAppointmentsByID(1);
 hospital1.ShowingTodaysQueues();
+// קלאס תיק רפואי
 var MedicalRecord = /** @class */ (function () {
     function MedicalRecord(patient, doctor, diagnosis, prescription) {
         this.patient = patient;
